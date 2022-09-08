@@ -6,13 +6,20 @@ import time
 #config section
 token =  "" #ApiToken xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 console_url = "" #https://usea1-xxxxxxx.sentinelone.net
-output_path = "c:\\S1_export\\blacklist.csv"
+output_path = "c:\\S1_export" #folder to write the file to
+output_file_name = "blacklist_%DATE%" #Output file name - token %DATE% will be replaced by today's date
+output_extension = ".csv" #Output file extension
 #end config section
 
 strApiURL = console_url + "/web/api/v2.1/restrictions?limit=100&includeChildren=True&includeParents=True"
 
+now = datetime.now() # current date and time
+date_string = now.strftime("%Y-%m-%d") #today's date
+output_file_name = output_file_name.replace("%DATE%", date_string) #replace token
+output_path = output_path + "\\" + output_file_name + output_extension #build output path
+
 def logToFile(strfilePathOut, strDataToLog, boolDeleteFile, strWriteMode):
-    with open(strfilePathOut, strWriteMode) as target:
+    with open(strfilePathOut, strWriteMode, encoding="utf-8") as target:
       if boolDeleteFile == True:
         target.truncate()
       target.write(strDataToLog + "\n")
